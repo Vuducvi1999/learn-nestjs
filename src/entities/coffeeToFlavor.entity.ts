@@ -1,7 +1,8 @@
-import { JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Coffee } from './coffee.entity';
 import { Flavor } from './flavor.entity';
 
+@Entity()
 export class CoffeeToFlavor {
   @PrimaryGeneratedColumn()
   id: number;

@@ -1,6 +1,6 @@
 
 services:
-  database:
+  db:
     image: postgres:latest
     container_name: nestjs_db
     restart: always
@@ -17,9 +17,11 @@ services:
       interval: 1m
       timeout: 5s
       retries: 10
+    networks:
+      - coffee_shop
 
   backend:
-    image: node:18-alpine
+    image: node:20-alpine
     container_name: nestjs_backend
     restart: always
     working_dir: /app
@@ -29,5 +31,12 @@ services:
     ports:
       - '3000:3000'
     depends_on:
-      - database
+      - db
+    networks:
+      - coffee_shop
+    environment:
+      - DB_HOST=host.docker.internal
+
+networks:
+  coffee_shop:
 
