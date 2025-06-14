@@ -8,5 +8,5 @@ const databaseService = new DatabaseService();
 export default new DataSource({
   ...databaseService.getConnectionOptions(),
   migrations: ['./dist/db/migrations/*.js'],
-  entities: ['./dist/entities/*.entity.js'],
+  entities: ['./dist/src/entities/*.entity.js'],
 });
