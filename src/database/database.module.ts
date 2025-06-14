@@ -8,15 +8,18 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forFeature(dbConfig),
     TypeOrmModule.forRootAsync({
-      useFactory: () => {
+      imports: [DatabaseModule],
+      inject: [DatabaseService],
+      useFactory: (databaseService: DatabaseService) => {
         return {
-          ...DatabaseService.getConnectionOptions(),
-          entities: ['./entities/*.entity.ts'],
+          ...databaseService.getConnectionOptions(),
+          entities: ['../entities/*.entity.ts'],
           synchronize: false,
         };
       },
     }),
   ],
   providers: [DatabaseService],
+  exports: [DatabaseService],
 })
 export class DatabaseModule {}

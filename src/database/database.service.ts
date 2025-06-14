@@ -5,7 +5,7 @@ import { DataSourceOptions } from 'typeorm';
 export class DatabaseService {
   constructor() {}
 
-  static getConnectionOptions(): DataSourceOptions {
+  getConnectionOptions(): DataSourceOptions {
     return {
       type: 'postgres',
       database: process.env.DB_NAME,
