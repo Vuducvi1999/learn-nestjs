@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:latest
+    container_name: coffee_db
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres:/var/lib/postgresql
+    environment:
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_USER=vuducvi
+      - POSTGRES_DB=coffee_shop
+    healthcheck:
+      test: ["CMD", "pg_isready -U vuducvi -d coffee_shop"]
+      interval: 1m
+      timeout: 5s
+      retries: 5
+  backend:
+    image: node:20-alpine
+    container_name: coffee_backend
+    restart: always
+    environment:
+      - DB_HOST=host.docker.internal
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - ./:/app
+    depends_on:
+      - database
+    command: ["npm", "run", "start:dev"]
+

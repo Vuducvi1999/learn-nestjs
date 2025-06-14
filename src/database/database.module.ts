@@ -2,17 +2,15 @@ import { Module } from '@nestjs/common';
 import { DatabaseService } from './database.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dbConfig } from 'src/configs/db.config';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     ConfigModule.forFeature(dbConfig),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule.forFeature(dbConfig)],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
+      useFactory: () => {
         return {
-          ...configService.get<Record<string, any>>('db'),
+          ...DatabaseService.getConnectionOptions(),
           entities: ['./entities/*.entity.ts'],
           synchronize: false,
         };

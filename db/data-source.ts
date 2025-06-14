@@ -3,8 +3,9 @@ import { DatabaseService } from 'src/database/database.service';
 import { DataSource } from 'typeorm';
 
 void ConfigModule.forRoot();
-console.log(DatabaseService.getConnectionOptions());
 
 export default new DataSource({
   ...DatabaseService.getConnectionOptions(),
+  migrations: ['./dist/db/migrations/*.js'],
+  entities: ['./dist/entities/*.entity.js'],
 });
