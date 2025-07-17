@@ -4,9 +4,9 @@ project: practice-market-management-using-nestjs
 - kết nối mongodb bằng MongooseModule.forRoot 
 - tạo StoreSchema 
 	+ name 
-	+ category: enum 
-	+ images?: object[] 
+	+ optional images: object[] 
 	+ items: Item[] 
+	+ owner: User
 
 - StoreService 
 	+ findAll 
@@ -34,8 +34,6 @@ project: practice-market-management-using-nestjs
 	+ name
 	+ email 
 	+ password 
-	+ role: [customer, owner] 
-
 
 - ItemSchema 
 	+ name 
