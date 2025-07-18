@@ -7,6 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ValidRefreshToken } from 'src/schemas/refresh-token.schema';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +30,9 @@ export class AuthService {
     await this.usersService.create({ name, password, email });
   }
 
-  login(user: UserDocument) {
+  async login(loginDto: LoginDto) {
+    const user = await this.usersService.findOne(loginDto);
+    if (!user) throw new UnauthorizedException('User not exist');
     return this.generateNewToken(user);
   }
 

@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { RequestRefreshTokenDto } from './dto/request-refresh-token.dto';
 import { Public } from 'src/common/decorators/public-api';
 import { CreateUserDto } from './dto/create-user.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Controller()
 export class AppController {
@@ -17,8 +18,8 @@ export class AppController {
   }
 
   @Post('auth/login')
-  login(@CurrentUser() user: UserDocument) {
-    return this.authService.login(user);
+  login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
   }
 
   @Post('auth/refresh-token')
