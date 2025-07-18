@@ -12,6 +12,7 @@ import { StoreService } from './store.service';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { QueryStoreDto } from './dto/query-store-dto';
+import { IsObjectIdPipe } from '@nestjs/mongoose';
 
 @Controller('store')
 export class StoreController {
@@ -28,17 +29,20 @@ export class StoreController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.storeService.findOne(+id);
+  findOne(@Param('id', IsObjectIdPipe) id: string) {
+    return this.storeService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStoreDto: UpdateStoreDto) {
-    return this.storeService.update(+id, updateStoreDto);
+  update(
+    @Param('id', IsObjectIdPipe) id: string,
+    @Body() updateStoreDto: UpdateStoreDto,
+  ) {
+    return this.storeService.update(id, updateStoreDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.storeService.remove(+id);
+  remove(@Param('id', IsObjectIdPipe) id: string) {
+    return this.storeService.remove(id);
   }
 }

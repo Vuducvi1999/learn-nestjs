@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -7,7 +7,9 @@ import { EnvType, envValidation } from 'env-validation';
 import { StoreModule } from './modules/store/store.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserService } from './modules/user/user.service';
-import { UserModule } from './modules/user/user.module';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtAuthGuard } from './common/guards/auth.guard';
 
 @Module({
   imports: [
@@ -29,11 +31,33 @@ import { UserModule } from './modules/user/user.module';
         };
       },
     }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService<EnvType>) => {
+        return {
+          secret: configService.get('JWT_SECRET', { infer: true }),
+          signOptions: {
+            expiresIn: '5m',
+          },
+        };
+      },
+    }),
     StoreModule,
     AuthModule,
-    UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService, UserService],
+  providers: [
+    AppService,
+    UserService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}

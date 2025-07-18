@@ -7,6 +7,7 @@ const envSchema = z.object({
   MONGO_DB: z.string(),
   MONGO_HOST: z.string(),
   MONGO_PORT: z.coerce.number(),
+  JWT_SECRET: z.string(),
 });
 
 export const envValidation = (config: Record<string, unknown>) => {

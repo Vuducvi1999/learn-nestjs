@@ -45,15 +45,15 @@ export class StoreService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     return await this.storeModel.findById(id);
   }
 
-  async update(id: number, updateStoreDto: UpdateStoreDto) {
+  async update(id: string, updateStoreDto: UpdateStoreDto) {
     return await this.storeModel.findByIdAndUpdate(id, updateStoreDto);
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     return await this.storeModel.findByIdAndDelete(id);
   }
 }

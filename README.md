@@ -29,7 +29,9 @@ project: practice-market-management-using-nestjs
 		* validate bằng UpdateStoreDto 
 	+ deleteById 
 
-- triển khai authen sử dụng passport-jwt
+- triển khai authen sử dụng passport-jwt 
+  + accessToken
+  + refreshToken (rotation)
 - tạo UserSchema 
 	+ name
 	+ email 
