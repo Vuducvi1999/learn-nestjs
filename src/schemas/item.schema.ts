@@ -13,7 +13,7 @@ export class Item {
   @Prop({ required: true })
   price: number;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Store' })
+  @Prop({ type: { type: mongoose.Schema.Types.ObjectId, ref: 'Store' } })
   store: Store;
 }
 

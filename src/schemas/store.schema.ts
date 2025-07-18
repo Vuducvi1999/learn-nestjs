@@ -5,10 +5,10 @@ import { Item } from './item.schema';
 
 @Schema()
 export class Store {
-  @Prop()
+  @Prop({ required: true })
   name: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  @Prop({ type: { type: mongoose.Schema.Types.ObjectId, ref: 'User' } })
   owner: User;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Item' }] })

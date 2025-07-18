@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EnvType, envValidation } from 'env-validation';
+import { StoreModule } from './store/store.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { EnvType, envValidation } from 'env-validation';
         };
       },
     }),
+    StoreModule,
   ],
   controllers: [AppController],
   providers: [AppService],
