@@ -3,6 +3,8 @@ import { StoreService } from './store.service';
 import { StoreController } from './store.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Store, StoreSchema } from 'src/schemas/store.schema';
+import { CaslModule } from 'src/shared/modules/casl/casl.module';
+import { CaslService } from 'src/shared/modules/casl/casl.service';
 
 @Module({
   imports: [
@@ -12,8 +14,9 @@ import { Store, StoreSchema } from 'src/schemas/store.schema';
         schema: StoreSchema,
       },
     ]),
+    CaslModule,
   ],
   controllers: [StoreController],
-  providers: [StoreService],
+  providers: [StoreService, CaslService],
 })
 export class StoreModule {}

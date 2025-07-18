@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 import { Store } from './store.schema';
 
 @Schema()
-export class Item {
+export class Item extends mongoose.Document {
   @Prop({ required: true })
   name: string;
 
@@ -17,5 +17,4 @@ export class Item {
   store: Store;
 }
 
-export type ItemDocument = mongoose.HydratedDocument<Item>;
 export const ItemSchema = SchemaFactory.createForClass(Item);

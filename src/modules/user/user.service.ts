@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserDocument } from 'src/schemas/user.schema';
+import { User, User } from 'src/schemas/user.schema';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { hash } from 'bcrypt';
 
@@ -16,10 +16,7 @@ export class UserService {
     return await this.userModel.findById(id);
   }
 
-  async findOne({
-    email,
-    name,
-  }: Partial<Pick<UserDocument, 'name' | 'email'>>) {
+  async findOne({ email, name }: Partial<Pick<User, 'name' | 'email'>>) {
     return await this.userModel.findOne({ email, name });
   }
 

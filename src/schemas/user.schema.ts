@@ -4,7 +4,7 @@ import { Store } from './store.schema';
 import { Exclude } from 'class-transformer';
 
 @Schema()
-export class User {
+export class User extends mongoose.Document {
   @Prop({ required: true })
   name: string;
 
@@ -18,7 +18,5 @@ export class User {
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Store' }] })
   stores: Store[];
 }
-
-export type UserDocument = mongoose.HydratedDocument<User>;
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -1,17 +1,15 @@
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EnvType, envValidation } from 'env-validation';
 import { StoreModule } from './modules/store/store.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { UserService } from './modules/user/user.service';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './common/guards/auth.guard';
 import { ItemModule } from './modules/item/item.module';
-import { CaslModule } from './modules/casl/casl.module';
+import { OwnerModule } from './modules/owner/owner.module';
 
 @Module({
   imports: [
@@ -48,12 +46,10 @@ import { CaslModule } from './modules/casl/casl.module';
     StoreModule,
     AuthModule,
     ItemModule,
-    CaslModule,
+    OwnerModule,
   ],
   controllers: [AppController],
   providers: [
-    AppService,
-    UserService,
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,

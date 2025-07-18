@@ -4,7 +4,7 @@ import { User } from './user.schema';
 import { Item } from './item.schema';
 
 @Schema()
-export class Store {
+export class Store extends mongoose.Document {
   @Prop({ required: true })
   name: string;
 
@@ -15,5 +15,4 @@ export class Store {
   items: Item[];
 }
 
-export type StoreDocument = mongoose.HydratedDocument<Store>;
 export const StoreSchema = SchemaFactory.createForClass(Store);

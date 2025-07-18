@@ -1,47 +1,45 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Store, StoreDocument } from 'src/schemas/store.schema';
-import { FilterQuery, Model } from 'mongoose';
+import { Store } from 'src/schemas/store.schema';
+import { Model, RootFilterQuery } from 'mongoose';
 import { QueryStoreDto } from './dto/query-store-dto';
-import { paginationResult } from 'src/shared/helpers/pagination-result';
+import { paginationExecute } from 'src/shared/helpers/pagination-execute';
+import { User } from 'src/schemas/user.schema';
+import { CaslService } from 'src/shared/modules/casl/casl.service';
+import { UserAction } from 'src/shared/types/user-actions';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class StoreService {
   constructor(
+    private caslService: CaslService,
     @InjectModel(Store.name)
     private storeModel: Model<Store>,
   ) {}
 
-  // check currentUser for owner
-  async create(createStoreDto: CreateStoreDto) {
-    return await this.storeModel.create({
-      ...createStoreDto,
-    });
+  async create(user: User, createStoreDto: CreateStoreDto) {
+    const ability = this.caslService.createForUser(user);
+    const newStore = plainToClass(Store, createStoreDto);
+    if (ability.can(UserAction.create, newStore))
+      return await this.storeModel.create({
+        ...createStoreDto,
+      });
+
+    throw new UnauthorizedException();
   }
 
-  async findAll({ name, limit = 10, page = 0 }: QueryStoreDto) {
-    const queries: FilterQuery<StoreDocument> = {
-      name: {
-        $regex: new RegExp(name, 'i'),
-      },
+  async findAll({ name, limit, page }: QueryStoreDto) {
+    const queries: RootFilterQuery<Store> = {
+      name: new RegExp(name, 'i'),
     };
 
-    const [total, data] = await Promise.all([
-      this.storeModel.countDocuments(queries),
-      this.storeModel
-        .find(queries)
-        .limit(limit)
-        .skip(limit * page)
-        .exec(),
-    ]);
-
-    return paginationResult<StoreDocument>({
-      currentPage: page,
-      data,
+    return await paginationExecute({
+      model: this.storeModel,
+      queries,
       limit,
-      total,
+      page,
     });
   }
 

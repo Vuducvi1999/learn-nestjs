@@ -1,12 +1,7 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
+import { PaginationQueryDto } from 'src/shared/classes/pagination-query';
 
-export class QueryStoreDto {
+export class QueryStoreDto extends PaginationQueryDto {
   @IsString()
   name: string;
-
-  @IsNumber()
-  limit: number;
-
-  @IsNumber()
-  page: number;
 }
