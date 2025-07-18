@@ -3,11 +3,8 @@ import { ItemService } from './item.service';
 
 @Controller('item')
 export class ItemController {
-  constructor(
-    private itemService: ItemService
-  ){}
+  constructor(private itemService: ItemService) {}
 
   @Post('items')
-  
-
+  bulkCreate() {}
 }

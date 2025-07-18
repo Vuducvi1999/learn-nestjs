@@ -20,4 +20,5 @@ export class User {
 }
 
 export type UserDocument = mongoose.HydratedDocument<User>;
+
 export const UserSchema = SchemaFactory.createForClass(User);

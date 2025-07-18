@@ -11,6 +11,7 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './common/guards/auth.guard';
 import { ItemModule } from './modules/item/item.module';
+import { CaslModule } from './modules/casl/casl.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { ItemModule } from './modules/item/item.module';
     StoreModule,
     AuthModule,
     ItemModule,
+    CaslModule,
   ],
   controllers: [AppController],
   providers: [
