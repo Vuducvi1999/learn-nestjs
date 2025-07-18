@@ -45,7 +45,7 @@ project: practice-market-management-using-nestjs
 
 - author bằng attribute-base-access-control với casl library 
 	+ customer chỉ có thể xem tất cả các sản phẩm 
-	+ owner chỉ được create, update, delete sản phẩm trong cửa hàng của mình 
+	+ owner là customer nhưng được create, update, delete sản phẩm trong cửa hàng của mình 
 
 - testing 
 	+ unit test 

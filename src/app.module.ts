@@ -10,6 +10,7 @@ import { UserService } from './modules/user/user.service';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './common/guards/auth.guard';
+import { ItemModule } from './modules/item/item.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { JwtAuthGuard } from './common/guards/auth.guard';
     }),
     StoreModule,
     AuthModule,
+    ItemModule,
   ],
   controllers: [AppController],
   providers: [
