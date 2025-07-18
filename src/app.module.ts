@@ -4,7 +4,10 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EnvType, envValidation } from 'env-validation';
-import { StoreModule } from './store/store.module';
+import { StoreModule } from './modules/store/store.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UserService } from './modules/user/user.service';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -27,8 +30,10 @@ import { StoreModule } from './store/store.module';
       },
     }),
     StoreModule,
+    AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, UserService],
 })
 export class AppModule {}
