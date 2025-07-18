@@ -13,7 +13,6 @@ export class CreateItemDto {
   @IsNotEmpty()
   price: number;
 
-  @IsString()
   @IsValidObjectId()
   store: string;
 }

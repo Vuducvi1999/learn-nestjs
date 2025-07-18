@@ -10,7 +10,7 @@ import {
 import { ItemService } from './item.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { CurrentUser } from 'src/common/decorators/current-user';
-import { User } from 'src/schemas/user.schema';
+import { UserDocument } from 'src/schemas/user.schema';
 import { QueryItemDto } from './dto/query-item.dto';
 import { Public } from 'src/common/decorators/public-api';
 
@@ -25,17 +25,26 @@ export class ItemController {
   }
 
   @Post()
-  create(@CurrentUser() user: User, @Body() createItemDto: CreateItemDto) {
+  create(
+    @CurrentUser() user: UserDocument,
+    @Body() createItemDto: CreateItemDto,
+  ) {
     return this.itemService.create(user, createItemDto);
   }
 
   @Patch()
-  update(@CurrentUser() user: User, @Body() createItemDto: CreateItemDto) {
+  update(
+    @CurrentUser() user: UserDocument,
+    @Body() createItemDto: CreateItemDto,
+  ) {
     return this.itemService.create(user, createItemDto);
   }
 
   @Delete()
-  delete(@CurrentUser() user: User, @Body() createItemDto: CreateItemDto) {
+  delete(
+    @CurrentUser() user: UserDocument,
+    @Body() createItemDto: CreateItemDto,
+  ) {
     return this.itemService.create(user, createItemDto);
   }
 }

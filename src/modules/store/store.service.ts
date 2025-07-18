@@ -6,10 +6,9 @@ import { Store } from 'src/schemas/store.schema';
 import { Model, RootFilterQuery } from 'mongoose';
 import { QueryStoreDto } from './dto/query-store-dto';
 import { paginationExecute } from 'src/shared/helpers/pagination-execute';
-import { User } from 'src/schemas/user.schema';
+import { UserDocument } from 'src/schemas/user.schema';
 import { CaslService } from 'src/shared/modules/casl/casl.service';
 import { UserAction } from 'src/shared/types/user-actions';
-import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class StoreService {
@@ -19,15 +18,14 @@ export class StoreService {
     private storeModel: Model<Store>,
   ) {}
 
-  async create(user: User, createStoreDto: CreateStoreDto) {
+  async create(user: UserDocument, createStoreDto: CreateStoreDto) {
     const ability = this.caslService.createForUser(user);
-    const newStore = plainToClass(Store, createStoreDto);
-    if (ability.can(UserAction.create, newStore))
-      return await this.storeModel.create({
-        ...createStoreDto,
-      });
+    const newStore = new this.storeModel(createStoreDto);
+    if (!ability.can(UserAction.create, newStore))
+      throw new UnauthorizedException();
 
-    throw new UnauthorizedException();
+    await newStore.save();
+    return newStore;
   }
 
   async findAll({ name, limit, page }: QueryStoreDto) {

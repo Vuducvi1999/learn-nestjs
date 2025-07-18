@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/schemas/user.schema';
+import { UserDocument } from 'src/schemas/user.schema';
 import { QueryOwnerItemDto } from './dto/query-owner-item.dto';
 import { Model, RootFilterQuery } from 'mongoose';
 import { Item } from 'src/schemas/item.schema';
@@ -18,7 +18,7 @@ export class OwnerService {
   ) {}
 
   async getAllItems(
-    user: User,
+    user: UserDocument,
     { name, priceFrom, priceTo, limit, page }: QueryOwnerItemDto,
   ) {
     const queries: RootFilterQuery<Item> = {
@@ -35,7 +35,10 @@ export class OwnerService {
     });
   }
 
-  async getAllStores(user: User, { name, limit, page }: QueryOwnerStoreDto) {
+  async getAllStores(
+    user: UserDocument,
+    { name, limit, page }: QueryOwnerStoreDto,
+  ) {
     const queries: RootFilterQuery<Item> = {
       name: { $regex: name, $options: 'i' },
       stores: { $in: user.stores },

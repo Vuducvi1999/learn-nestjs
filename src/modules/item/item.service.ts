@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateItemDto } from './dto/create-item.dto';
-import { User } from 'src/schemas/user.schema';
+import { UserDocument } from 'src/schemas/user.schema';
 import { UserAction } from 'src/shared/types/user-actions';
 import { InjectModel } from '@nestjs/mongoose';
 import { Item } from 'src/schemas/item.schema';
@@ -40,7 +40,7 @@ export class ItemService {
     });
   }
 
-  async create(user: User, createItemDto: CreateItemDto) {
+  async create(user: UserDocument, createItemDto: CreateItemDto) {
     const ability = this.caslService.createForUser(user);
     const newItem = plainToInstance(Item, createItemDto);
 

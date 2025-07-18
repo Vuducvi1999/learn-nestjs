@@ -14,14 +14,17 @@ import { UpdateStoreDto } from './dto/update-store.dto';
 import { QueryStoreDto } from './dto/query-store-dto';
 import { IsObjectIdPipe } from '@nestjs/mongoose';
 import { CurrentUser } from 'src/common/decorators/current-user';
-import { User } from 'src/schemas/user.schema';
+import { UserDocument } from 'src/schemas/user.schema';
 
 @Controller('store')
 export class StoreController {
   constructor(private readonly storeService: StoreService) {}
 
   @Post()
-  create(@CurrentUser() user: User, @Body() createStoreDto: CreateStoreDto) {
+  create(
+    @CurrentUser() user: UserDocument,
+    @Body() createStoreDto: CreateStoreDto,
+  ) {
     return this.storeService.create(user, createStoreDto);
   }
 

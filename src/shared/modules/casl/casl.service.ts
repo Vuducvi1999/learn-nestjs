@@ -5,18 +5,16 @@ import {
   InferSubjects,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-import { Item, ItemSchema } from 'src/schemas/item.schema';
-import { Store, StoreSchema } from 'src/schemas/store.schema';
-import { User } from 'src/schemas/user.schema';
+import { Item } from 'src/schemas/item.schema';
+import { Store } from 'src/schemas/store.schema';
+import { UserDocument } from 'src/schemas/user.schema';
 import { UserAction } from 'src/shared/types/user-actions';
 
-type Subjects = InferSubjects<
-  typeof ItemSchema | typeof Item | typeof StoreSchema | typeof Store
->;
+type Subjects = InferSubjects<typeof Item | typeof Store>;
 
 @Injectable()
 export class CaslService {
-  createForUser(user: User) {
+  createForUser(user: UserDocument) {
     const { can, build } = new AbilityBuilder(createMongoAbility);
 
     can(UserAction.read, Item);
@@ -41,12 +39,12 @@ export class CaslService {
       });
       can(UserAction.update, Store, {
         owner: {
-          _id: user._id,
+          $eq: user._id,
         },
       });
       can(UserAction.delete, Store, {
         owner: {
-          _id: user._id,
+          $eq: user._id,
         },
       });
     }

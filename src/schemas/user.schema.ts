@@ -1,10 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-import { Store } from './store.schema';
 import { Exclude } from 'class-transformer';
 
 @Schema()
-export class User extends mongoose.Document {
+export class User {
   @Prop({ required: true })
   name: string;
 
@@ -16,7 +15,8 @@ export class User extends mongoose.Document {
   hashedPassword: string;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Store' }] })
-  stores: Store[];
+  stores: mongoose.Types.ObjectId[];
 }
 
+export type UserDocument = mongoose.HydratedDocument<User>;
 export const UserSchema = SchemaFactory.createForClass(User);

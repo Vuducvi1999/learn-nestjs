@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { compareSync } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/schemas/user.schema';
+import { UserDocument } from 'src/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { ValidRefreshToken } from 'src/schemas/refresh-token.schema';
 import { Model } from 'mongoose';
@@ -36,7 +36,7 @@ export class AuthService {
     return this.generateNewToken(user);
   }
 
-  async refreshToken(user: User, token: string) {
+  async refreshToken(user: UserDocument, token: string) {
     const currentRefreshToken = await this.validRefreshTokenModel.findOne({
       token,
     });
@@ -54,7 +54,7 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  private async generateNewToken(user: User) {
+  private async generateNewToken(user: UserDocument) {
     const payload = { name: user.name, _id: user._id };
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload),
