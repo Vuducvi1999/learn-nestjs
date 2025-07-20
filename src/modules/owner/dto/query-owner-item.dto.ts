@@ -5,17 +5,17 @@ import { IsArrayValidObjectId } from 'src/shared/validations/is-array-valid-obje
 export class QueryOwnerItemDto extends PaginationQueryDto {
   @IsString()
   @IsOptional()
-  name: string;
+  name?: string;
 
   @IsNumber()
   @IsOptional()
-  priceFrom: number;
+  priceFrom?: number;
 
   @IsNumber()
   @IsOptional()
-  priceTo: number;
+  priceTo?: number;
 
   @IsArrayValidObjectId()
   @IsOptional()
-  stores: string[];
+  stores?: string[];
 }

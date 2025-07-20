@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { UserDocument } from 'src/schemas/user.schema';
 import { QueryOwnerItemDto } from './dto/query-owner-item.dto';
 import { Model, RootFilterQuery } from 'mongoose';
-import { Item } from 'src/schemas/item.schema';
-import { paginationExecute } from 'src/shared/helpers/pagination-execute';
 import { InjectModel } from '@nestjs/mongoose';
-import { Store } from 'src/schemas/store.schema';
 import { QueryOwnerStoreDto } from './dto/query-owner-store.dto';
+import { Item } from '../../schemas/item.schema';
+import { Store } from '../../schemas/store.schema';
+import { UserDocument } from '../../schemas/user.schema';
+import { paginationExecute } from '../../shared/helpers/pagination-execute';
 
 @Injectable()
 export class OwnerService {

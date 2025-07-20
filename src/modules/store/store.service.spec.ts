@@ -73,7 +73,7 @@ describe('StoreService', () => {
   });
 
   describe('[findAll]', () => {
-    it('should return pagination format', async () => {
+    it('should return pagination value', async () => {
       const limit = 10;
       const page = 1;
       const result: ReturnType<typeof paginationResult> = {

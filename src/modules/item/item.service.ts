@@ -1,14 +1,13 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateItemDto } from './dto/create-item.dto';
-import { UserDocument } from 'src/schemas/user.schema';
-import { UserAction } from 'src/shared/types/user-actions';
 import { InjectModel } from '@nestjs/mongoose';
-import { Item } from 'src/schemas/item.schema';
 import { RootFilterQuery, Model } from 'mongoose';
-import { plainToInstance } from 'class-transformer';
 import { QueryItemDto } from './dto/query-item.dto';
-import { paginationExecute } from 'src/shared/helpers/pagination-execute';
 import { CaslService } from '../../shared/modules/casl/casl.service';
+import { Item } from '../../schemas/item.schema';
+import { paginationExecute } from '../../shared/helpers/pagination-execute';
+import { UserDocument } from '../../schemas/user.schema';
+import { UserAction } from '../../shared/types/user-actions';
 
 @Injectable()
 export class ItemService {
@@ -42,10 +41,9 @@ export class ItemService {
 
   async create(user: UserDocument, createItemDto: CreateItemDto) {
     const ability = this.caslService.createForUser(user);
-    const newItem = plainToInstance(Item, createItemDto);
+    const newItem = new this.itemModel(createItemDto);
 
-    if (ability.can(UserAction.create, newItem))
-      return await this.itemModel.create(newItem);
+    if (ability.can(UserAction.create, newItem)) return await newItem.save();
     throw new UnauthorizedException('User must be owner of store');
   }
 }

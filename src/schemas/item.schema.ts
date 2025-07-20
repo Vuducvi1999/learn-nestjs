@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 
 @Schema()
-export class Item extends mongoose.Document<mongoose.Types.ObjectId> {
+export class Item {
   @Prop({ required: true })
   name: string;
 
@@ -16,4 +16,5 @@ export class Item extends mongoose.Document<mongoose.Types.ObjectId> {
   store: mongoose.Types.ObjectId;
 }
 
+export type ItemDocument = mongoose.HydratedDocument<Item>;
 export const ItemSchema = SchemaFactory.createForClass(Item);

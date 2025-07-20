@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { IsValidObjectId } from 'src/shared/validations/is-valid-object-id.validation';
 
 export class CreateItemDto {
@@ -7,12 +7,14 @@ export class CreateItemDto {
   name: string;
 
   @IsString()
-  description: string;
+  @IsOptional()
+  description?: string;
 
   @IsNumber()
   @IsNotEmpty()
   price: number;
 
   @IsValidObjectId()
-  store: string;
+  @IsOptional()
+  store?: string;
 }
