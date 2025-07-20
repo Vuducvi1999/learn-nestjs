@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
-import { compareSync } from 'bcrypt';
+import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UserDocument } from 'src/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
@@ -20,14 +20,14 @@ export class AuthService {
 
   async validateUser(email: string, password: string) {
     const user = await this.usersService.findOne({ email });
-    if (user && compareSync(password, user.hashedPassword)) {
+    if (user && (await compare(password, user.hashedPassword))) {
       return user;
     }
     return null;
   }
 
   async register({ name, password, email }: CreateUserDto) {
-    await this.usersService.create({ name, password, email });
+    return await this.usersService.create({ name, password, email });
   }
 
   async login(loginDto: LoginDto) {
@@ -58,7 +58,7 @@ export class AuthService {
     const payload = { name: user.name, _id: user._id };
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload),
-      this.jwtService.sign({}, { expiresIn: '1w' }),
+      this.jwtService.signAsync({}, { expiresIn: '1w' }),
     ]);
     return { accessToken, refreshToken };
   }

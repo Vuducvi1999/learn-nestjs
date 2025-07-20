@@ -2,13 +2,13 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Store } from 'src/schemas/store.schema';
 import { Model, RootFilterQuery } from 'mongoose';
 import { QueryStoreDto } from './dto/query-store-dto';
-import { paginationExecute } from 'src/shared/helpers/pagination-execute';
-import { UserDocument } from 'src/schemas/user.schema';
-import { CaslService } from 'src/shared/modules/casl/casl.service';
-import { UserAction } from 'src/shared/types/user-actions';
+import { CaslService } from '../../shared/modules/casl/casl.service';
+import { Store } from '../../schemas/store.schema';
+import { UserDocument } from '../../schemas/user.schema';
+import { UserAction } from '../../shared/types/user-actions';
+import { paginationExecute } from '../../shared/helpers/pagination-execute';
 
 @Injectable()
 export class StoreService {
@@ -50,6 +50,6 @@ export class StoreService {
   }
 
   async remove(id: string) {
-    return await this.storeModel.findByIdAndDelete(id);
+    await this.storeModel.findByIdAndDelete(id);
   }
 }

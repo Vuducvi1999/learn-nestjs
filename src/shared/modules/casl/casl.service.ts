@@ -5,10 +5,10 @@ import {
   InferSubjects,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-import { Item } from 'src/schemas/item.schema';
-import { Store } from 'src/schemas/store.schema';
-import { UserDocument } from 'src/schemas/user.schema';
-import { UserAction } from 'src/shared/types/user-actions';
+import { Item } from '../../../schemas/item.schema';
+import { Store } from '../../../schemas/store.schema';
+import { UserDocument } from '../../../schemas/user.schema';
+import { UserAction } from '../../types/user-actions';
 
 type Subjects = InferSubjects<typeof Item | typeof Store>;
 
