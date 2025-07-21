@@ -2,6 +2,8 @@ project: practice-market-management-using-nestjs
 
 ### required 
 - kết nối mongodb bằng MongooseModule.forRoot 
+  + sử dụng reference document  
+
 - tạo StoreSchema 
 	+ name 
 	+ optional images: object[] 
