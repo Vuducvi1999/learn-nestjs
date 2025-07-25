@@ -7,11 +7,15 @@ export class CrawlerService {
     private readonly libraryBookCrawlerService: LibraryBookCrawlerService,
   ) {}
 
-  get100LatestBooks() {
+  async get100LatestBooks() {
     return this.libraryBookCrawlerService.get100LatestBooks();
   }
 
-  getBookWithRange({ from, to }: { from: number; to: number }) {
+  async getBookWithRange({ from, to }: { from: number; to: number }) {
     return this.libraryBookCrawlerService.getBookWithRange({ from, to });
+  }
+
+  async getBookDetail(id: number) {
+    return this.libraryBookCrawlerService.getBookDetail(id);
   }
 }

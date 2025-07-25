@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { LibraryBookItem } from '../shared/types/book-library-item';
 import * as cherrio from 'cheerio';
 import {
@@ -8,7 +8,7 @@ import {
 
 @Injectable()
 export class LibraryBookCrawlerService {
-  async get100LatestBooks(): Promise<LibraryBookItem[]> {
+  async get100LatestBooks() {
     const latestBooks = await this.bookDetailFromHomePage();
     const latestPageIds = latestBooks.map(this.getPageIdFromDetailPage);
     const latestPageId = latestPageIds.at(0)!;
@@ -25,37 +25,50 @@ export class LibraryBookCrawlerService {
       { length: to - from + 1 },
       (_, index) => from + index,
     );
-    return Promise.all(
+    const imageUrls = await Promise.all(
       pageIds.map(async (i) => {
         return this.bookImageFromDetailPage(i);
       }),
     );
+    return imageUrls.flatMap((i) =>
+      i && !i.includes('BookCoverDefault') ? [i] : [],
+    );
   }
 
-  private async bookImageFromDetailPage(
-    pageId: number,
-  ): Promise<LibraryBookItem> {
+  async getBookDetail(id: number) {
+    return this.bookImageFromDetailPage(id);
+  }
+
+  private async bookImageFromDetailPage(pageId: number) {
     const detailPageUrl = `${bookDetailPrefixUrl}/${pageId}`;
-    const $ = await cherrio.fromURL(detailPageUrl);
-    const selector = '.box-product-detail .image-product img';
-    const imageUrl = $(selector).attr('src');
-    return {
-      imageUrl: imageUrl || '',
-      pageUrl: detailPageUrl,
-    };
+    try {
+      const $ = await cherrio.fromURL(detailPageUrl);
+      const selector = '.box-product-detail .image-product img';
+      const imageUrl = $(selector).attr('src');
+      return imageUrl;
+    } catch (error) {
+      return undefined;
+    }
   }
 
   private async bookDetailFromHomePage(): Promise<string[]> {
     const homePageUrl = bookHomePageUrl;
     const $ = await cherrio.fromURL(homePageUrl);
-    const selector = '.tailieumoi .image-book img';
+    const selector = '.tailieumoi .image-book a';
     return $(selector)
-      .map((i, el) => $(el).attr('src'))
-      .toArray();
+      .map((i, el) => $(el).attr('href'))
+      .toArray()
+      .map((detail) => `${bookHomePageUrl}${detail}`);
   }
 
   private getPageIdFromDetailPage(url: string): number {
-    const stringPageId = url.replace(bookDetailPrefixUrl, '');
-    return parseInt(stringPageId);
+    const regex = /\/(\d+)$/;
+    const match = url.match(regex);
+
+    if (match && match[1]) {
+      return parseInt(match[1]);
+    }
+
+    throw new InternalServerErrorException();
   }
 }

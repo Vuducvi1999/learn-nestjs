@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { CrawlerService } from './crawler.service';
 import { QueryBookRangeDto } from './dto/query-book-range.dto';
 
@@ -11,8 +11,13 @@ export class CrawlerController {
     return this.crawlerService.get100LatestBooks();
   }
 
-  @Get('/library/booksByRange')
+  @Get('/library/books-by-range')
   public getBooksByRange(@Query() { from, to }: QueryBookRangeDto) {
     return this.crawlerService.getBookWithRange({ from, to });
+  }
+
+  @Get('/library/book-detail/:id')
+  getBookDetail(@Param('id') id: number) {
+    return this.crawlerService.getBookDetail(id);
   }
 }
