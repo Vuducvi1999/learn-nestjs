@@ -5,14 +5,13 @@ import { CaslModule } from '../../shared/modules/casl/casl.module';
 import { CaslService } from '../../shared/modules/casl/casl.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Item, ItemSchema } from 'src/schemas/item.schema';
+import { Store, StoreSchema } from '../../schemas/store.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      {
-        name: Item.name,
-        schema: ItemSchema,
-      },
+      { name: Item.name, schema: ItemSchema },
+      { name: Store.name, schema: StoreSchema },
     ]),
     CaslModule,
   ],

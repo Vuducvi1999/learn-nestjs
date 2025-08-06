@@ -1,6 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-import { IsValidObjectId } from 'src/shared/validations/is-valid-object-id.validation';
+import {
+  IsMongoId,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateItemDto {
   @IsString()
@@ -18,8 +23,8 @@ export class CreateItemDto {
   @ApiProperty({ type: Number })
   price: number;
 
-  @IsValidObjectId()
   @IsOptional()
-  @ApiProperty({ type: String, required: false })
-  store?: string;
+  @ApiProperty({ type: String })
+  @IsMongoId()
+  store: string;
 }

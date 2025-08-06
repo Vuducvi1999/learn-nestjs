@@ -21,6 +21,6 @@ export class QueryItemDto extends PaginationQueryDto {
 
   @IsArrayValidObjectId()
   @IsOptional()
-  @ApiProperty({ type: [Number], required: false })
+  @ApiProperty({ type: [String], required: false })
   stores?: string[];
 }

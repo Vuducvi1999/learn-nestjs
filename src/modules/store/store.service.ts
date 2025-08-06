@@ -1,7 +1,7 @@
 import {
   Injectable,
   NotFoundException,
-  UnauthorizedException,
+  BadRequestException,
 } from '@nestjs/common';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
@@ -25,12 +25,17 @@ export class StoreService {
   async create(user: UserDocument, createStoreDto: CreateStoreDto) {
     const ability = this.caslService.createForUser(user);
     const newStore = new this.storeModel(createStoreDto);
-    if (ability.can(UserAction.create, newStore)) return newStore.save();
 
-    throw new UnauthorizedException();
+    if (!ability.can(UserAction.create, newStore))
+      throw new BadRequestException('User cannot create new Store');
+
+    await newStore.save();
+    user.stores.push(newStore._id);
+    await user.save();
+    return newStore;
   }
 
-  async findAll({ name, limit, page }: QueryStoreDto) {
+  async findAll({ name = '', limit, page }: QueryStoreDto) {
     const queries: RootFilterQuery<Store> = {
       name: new RegExp(name, 'i'),
     };
@@ -50,24 +55,18 @@ export class StoreService {
   async update(user: UserDocument, id: string, updateStoreDto: UpdateStoreDto) {
     const ability = this.caslService.createForUser(user);
     const existedStore = await this.storeModel.findById(id);
-
     if (!existedStore) throw new NotFoundException('Store not found');
-
     if (ability.can(UserAction.update, existedStore))
       return await this.storeModel.findByIdAndUpdate(id, updateStoreDto);
-
-    throw new UnauthorizedException('User must be owner of store');
+    throw new BadRequestException('User must be owner of store');
   }
 
   async remove(user: UserDocument, id: string) {
     const ability = this.caslService.createForUser(user);
     const existedStore = await this.storeModel.findById(id);
-
     if (!existedStore) throw new NotFoundException('Store not found');
-
     if (ability.can(UserAction.update, existedStore))
       return await this.storeModel.findByIdAndDelete(id);
-
-    throw new UnauthorizedException('User must be owner of store');
+    throw new BadRequestException('User must be owner of store');
   }
 }

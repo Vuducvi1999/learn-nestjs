@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
-import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { getModelToken } from '@nestjs/mongoose';
 import { compare } from 'bcrypt';
@@ -8,6 +7,7 @@ import { UnauthorizedException } from '@nestjs/common';
 import { mockUser, mockUserDocument } from '../../../test/data/mock-user';
 import { mockTokenPair } from '../../../test/data/jwt-token';
 import { ValidRefreshToken } from '../../schemas/refresh-token.schema';
+import { UserService } from '../../shared/modules/user/user.service';
 
 jest.mock('bcrypt');
 const sampleUser = { ...mockUser(), password: 'password' };

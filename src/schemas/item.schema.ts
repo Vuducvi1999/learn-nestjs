@@ -12,8 +12,12 @@ export class Item {
   @Prop({ required: true })
   price: number;
 
-  @Prop({ type: { type: mongoose.Schema.Types.ObjectId, ref: 'Store' } })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Store' })
   store: mongoose.Types.ObjectId;
+
+  constructor(partial: Partial<Item>) {
+    Object.assign(this, partial);
+  }
 }
 
 export type ItemDocument = mongoose.HydratedDocument<Item>;

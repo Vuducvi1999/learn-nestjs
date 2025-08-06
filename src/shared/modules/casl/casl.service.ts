@@ -1,16 +1,11 @@
-import {
-  AbilityBuilder,
-  createMongoAbility,
-  ExtractSubjectType,
-  InferSubjects,
-} from '@casl/ability';
-import { Injectable } from '@nestjs/common';
+import { AbilityBuilder, createMongoAbility } from '@casl/ability';
+import { Injectable, Type } from '@nestjs/common';
 import { Item } from '../../../schemas/item.schema';
 import { Store } from '../../../schemas/store.schema';
 import { UserDocument } from '../../../schemas/user.schema';
 import { UserAction } from '../../types/user-actions';
 
-type Subjects = InferSubjects<typeof Item | typeof Store>;
+type Subjects = Item | Store;
 
 @Injectable()
 export class CaslService {
@@ -50,9 +45,19 @@ export class CaslService {
     }
 
     return build({
-      // Read https://casl.js.org/v6/en/guide/subject-type-detection#use-classes-as-subject-types for details
-      detectSubjectType: (item) =>
-        item.constructor as ExtractSubjectType<Subjects>,
+      detectSubjectType: (subject) => {
+        // Ép kiểu subject.constructor thành 'any' để bỏ qua kiểm tra của TypeScript
+        // Hoặc ép kiểu thành một object có thuộc tính modelName
+        const constructor = subject.constructor as {
+          modelName?: 'Item' | 'Store';
+        };
+
+        return constructor.modelName === 'Item'
+          ? Item
+          : constructor.modelName == 'Store'
+            ? Store
+            : (subject.constructor as Type<Subjects>);
+      },
     });
   }
 }

@@ -19,12 +19,12 @@ export class OwnerService {
 
   async getAllItems(
     user: UserDocument,
-    { name, priceFrom, priceTo, limit, page }: QueryOwnerItemDto,
+    { name = '', priceFrom, priceTo, limit, page }: QueryOwnerItemDto,
   ) {
     const queries: RootFilterQuery<Item> = {
       name: { $regex: name, $options: 'i' },
       price: { $gte: priceFrom, $lte: priceTo },
-      store: { $in: user.stores },
+      store: { $in: user.stores.map(String) },
     };
 
     return await paginationExecute({
@@ -37,11 +37,11 @@ export class OwnerService {
 
   async getAllStores(
     user: UserDocument,
-    { name, limit, page }: QueryOwnerStoreDto,
+    { name = '', limit, page }: QueryOwnerStoreDto,
   ) {
-    const queries: RootFilterQuery<Item> = {
+    const queries: RootFilterQuery<Store> = {
       name: { $regex: name, $options: 'i' },
-      stores: { $in: user.stores },
+      _id: { $in: user.stores.map(String) },
     };
 
     return await paginationExecute({

@@ -5,6 +5,10 @@ import * as mongoose from 'mongoose';
 export class ValidRefreshToken {
   @Prop({ required: true, index: true })
   token: string;
+
+  constructor(partial: Partial<ValidRefreshToken>) {
+    Object.assign(this, partial);
+  }
 }
 
 export type ValidRefreshTokenDocument =

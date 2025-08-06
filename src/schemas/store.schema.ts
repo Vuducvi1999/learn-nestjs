@@ -6,11 +6,15 @@ export class Store {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ type: { type: mongoose.Schema.Types.ObjectId, ref: 'User' } })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   owner: mongoose.Types.ObjectId;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Item' }] })
   items: mongoose.Types.ObjectId[];
+
+  constructor(partial: Partial<Store>) {
+    Object.assign(this, partial);
+  }
 }
 
 export type StoreDocument = mongoose.HydratedDocument<Store>;

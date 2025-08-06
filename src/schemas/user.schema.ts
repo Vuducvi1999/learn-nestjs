@@ -16,6 +16,10 @@ export class User {
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Store' }] })
   stores: mongoose.Types.ObjectId[];
+
+  constructor(partial: Partial<User>) {
+    Object.assign(this, partial);
+  }
 }
 
 export type UserDocument = mongoose.HydratedDocument<User>;

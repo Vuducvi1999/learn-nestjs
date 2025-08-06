@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UserModule } from '../user/user.module';
-import { UserService } from '../user/user.service';
 import { JwtStrategy } from './auth.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -13,6 +11,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EnvType } from '../../../env-validation';
 import { AuthController } from './auth.controller';
+import { UserModule } from '../../shared/modules/user/user.module';
+import { UserService } from '../../shared/modules/user/user.service';
 
 @Module({
   imports: [
@@ -28,7 +28,7 @@ import { AuthController } from './auth.controller';
         return {
           secret: configService.get('JWT_SECRET', { infer: true }),
           signOptions: {
-            expiresIn: '5m',
+            expiresIn: '500m',
           },
         };
       },

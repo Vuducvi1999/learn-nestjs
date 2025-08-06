@@ -1,5 +1,4 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserService } from '../user/user.service';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UserDocument } from 'src/schemas/user.schema';
@@ -8,6 +7,8 @@ import { ValidRefreshToken } from 'src/schemas/refresh-token.schema';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
+import { JwtPayload } from '../../shared/types/jwt-payload';
+import { UserService } from '../../shared/modules/user/user.service';
 
 @Injectable()
 export class AuthService {
@@ -55,7 +56,7 @@ export class AuthService {
   }
 
   private async generateNewToken(user: UserDocument) {
-    const payload = { name: user.name, _id: user._id };
+    const payload: JwtPayload = { name: user.name, _id: user._id };
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload),
       this.jwtService.signAsync({}, { expiresIn: '1w' }),

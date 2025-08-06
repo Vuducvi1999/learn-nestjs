@@ -10,8 +10,10 @@ export function IsArrayValidObjectId(validationOptions?: ValidationOptions) {
       constraints: [],
       options: { message: 'Invalid _id', ...validationOptions },
       validator: {
-        validate(values: string[]) {
-          return values.every((i) => isValidObjectId(i));
+        validate(values: string | string[]) {
+          return Array.isArray(values)
+            ? values.every((i) => isValidObjectId(i))
+            : isValidObjectId(values);
         },
       },
     });

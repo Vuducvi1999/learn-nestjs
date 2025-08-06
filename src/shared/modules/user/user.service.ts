@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { hash } from 'bcrypt';
-import { User } from '../../schemas/user.schema';
+import { User } from '../../../schemas/user.schema';
+import { CreateUserDto } from '../../../modules/auth/dto/create-user.dto';
 
 @Injectable()
 export class UserService {
@@ -12,8 +12,8 @@ export class UserService {
     private readonly userModel: Model<User>,
   ) {}
 
-  async findById(id: string) {
-    return await this.userModel.findById(id);
+  async findById(id: string, lean = false) {
+    return await this.userModel.findById(id).lean(lean);
   }
 
   async findOne({ email }: Partial<Pick<User, 'email'>>) {
