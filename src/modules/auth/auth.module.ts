@@ -9,6 +9,9 @@ import {
   ValidRefreshToken,
   ValidRefreshTokenSchema,
 } from 'src/schemas/refresh-token.schema';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { EnvType } from '../../../env-validation';
 
 @Module({
   imports: [
@@ -17,6 +20,18 @@ import {
     MongooseModule.forFeature([
       { name: ValidRefreshToken.name, schema: ValidRefreshTokenSchema },
     ]),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService<EnvType>) => {
+        return {
+          secret: configService.get('JWT_SECRET', { infer: true }),
+          signOptions: {
+            expiresIn: '5m',
+          },
+        };
+      },
+    }),
   ],
   providers: [AuthService, UserService, AuthStrategy],
 })

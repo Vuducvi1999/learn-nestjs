@@ -14,8 +14,9 @@ import { Item, ItemSchema } from 'src/schemas/item.schema';
         schema: ItemSchema,
       },
     ]),
+    CaslModule,
   ],
-  controllers: [ItemController, CaslModule],
+  controllers: [ItemController],
   providers: [ItemService, CaslService],
   exports: [ItemService],
 })

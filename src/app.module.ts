@@ -6,7 +6,6 @@ import { EnvType, envValidation } from 'env-validation';
 import { StoreModule } from './modules/store/store.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './common/guards/auth.guard';
 import { ItemModule } from './modules/item/item.module';
 import { OwnerModule } from './modules/owner/owner.module';
@@ -28,18 +27,6 @@ import { OwnerModule } from './modules/owner/owner.module';
       useFactory: (configService: ConfigService<EnvType>) => {
         return {
           uri: configService.get('MONGO_URI', { infer: true }),
-        };
-      },
-    }),
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService<EnvType>) => {
-        return {
-          secret: configService.get('JWT_SECRET', { infer: true }),
-          signOptions: {
-            expiresIn: '5m',
-          },
         };
       },
     }),
