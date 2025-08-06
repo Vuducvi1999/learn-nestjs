@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -21,11 +25,9 @@ export class StoreService {
   async create(user: UserDocument, createStoreDto: CreateStoreDto) {
     const ability = this.caslService.createForUser(user);
     const newStore = new this.storeModel(createStoreDto);
-    if (!ability.can(UserAction.create, newStore))
-      throw new UnauthorizedException();
+    if (ability.can(UserAction.create, newStore)) return newStore.save();
 
-    await newStore.save();
-    return newStore;
+    throw new UnauthorizedException();
   }
 
   async findAll({ name, limit, page }: QueryStoreDto) {
@@ -45,11 +47,27 @@ export class StoreService {
     return await this.storeModel.findById(id);
   }
 
-  async update(id: string, updateStoreDto: UpdateStoreDto) {
-    return await this.storeModel.findByIdAndUpdate(id, updateStoreDto);
+  async update(user: UserDocument, id: string, updateStoreDto: UpdateStoreDto) {
+    const ability = this.caslService.createForUser(user);
+    const existedStore = await this.storeModel.findById(id);
+
+    if (!existedStore) throw new NotFoundException('Store not found');
+
+    if (ability.can(UserAction.update, existedStore))
+      return await this.storeModel.findByIdAndUpdate(id, updateStoreDto);
+
+    throw new UnauthorizedException('User must be owner of store');
   }
 
-  async remove(id: string) {
-    await this.storeModel.findByIdAndDelete(id);
+  async remove(user: UserDocument, id: string) {
+    const ability = this.caslService.createForUser(user);
+    const existedStore = await this.storeModel.findById(id);
+
+    if (!existedStore) throw new NotFoundException('Store not found');
+
+    if (ability.can(UserAction.update, existedStore))
+      return await this.storeModel.findByIdAndDelete(id);
+
+    throw new UnauthorizedException('User must be owner of store');
   }
 }

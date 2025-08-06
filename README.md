@@ -54,6 +54,25 @@ project: practice-market-management-using-nestjs
 	+ e2e test 
 
 
+### apis
+- POST /auth/register
+- POST /auth/login
+- POST /auth/refresh-token
+
+- GET /owners/items
+- GET /owners/stores
+
+- POST /stores
+- GET /stores
+- GET /stores/:id
+- PATCH /stores/:id
+- DELETE /stores/:id
+
+- GET /items
+- POST /items
+- PATCH /items/:id
+- DELETE /items/:id
+
 ### optional 
 - swagger 
 

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserModule } from '../user/user.module';
 import { UserService } from '../user/user.service';
-import { AuthStrategy } from './auth.strategy';
+import { JwtStrategy } from './auth.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
@@ -12,6 +12,7 @@ import {
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EnvType } from '../../../env-validation';
+import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { EnvType } from '../../../env-validation';
       },
     }),
   ],
-  providers: [AuthService, UserService, AuthStrategy],
+  controllers: [AuthController],
+  providers: [AuthService, UserService, JwtStrategy],
 })
 export class AuthModule {}

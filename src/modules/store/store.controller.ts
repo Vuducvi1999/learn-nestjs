@@ -15,8 +15,10 @@ import { QueryStoreDto } from './dto/query-store-dto';
 import { IsObjectIdPipe } from '@nestjs/mongoose';
 import { CurrentUser } from 'src/common/decorators/current-user';
 import { UserDocument } from 'src/schemas/user.schema';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
-@Controller('store')
+@Controller('stores')
+@ApiBearerAuth()
 export class StoreController {
   constructor(private readonly storeService: StoreService) {}
 
@@ -40,14 +42,18 @@ export class StoreController {
 
   @Patch(':id')
   update(
+    @CurrentUser() user: UserDocument,
     @Param('id', IsObjectIdPipe) id: string,
     @Body() updateStoreDto: UpdateStoreDto,
   ) {
-    return this.storeService.update(id, updateStoreDto);
+    return this.storeService.update(user, id, updateStoreDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', IsObjectIdPipe) id: string) {
-    return this.storeService.remove(id);
+  remove(
+    @CurrentUser() user: UserDocument,
+    @Param('id', IsObjectIdPipe) id: string,
+  ) {
+    return this.storeService.remove(user, id);
   }
 }

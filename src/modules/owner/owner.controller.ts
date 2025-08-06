@@ -4,8 +4,10 @@ import { UserDocument } from 'src/schemas/user.schema';
 import { QueryOwnerItemDto } from './dto/query-owner-item.dto';
 import { OwnerService } from './owner.service';
 import { QueryStoreDto } from '../store/dto/query-store-dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller()
+@ApiBearerAuth()
 export class OwnerController {
   constructor(private ownerService: OwnerService) {}
 

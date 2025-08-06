@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Patch,
   Post,
   Query,
@@ -13,6 +14,9 @@ import { CurrentUser } from 'src/common/decorators/current-user';
 import { UserDocument } from 'src/schemas/user.schema';
 import { QueryItemDto } from './dto/query-item.dto';
 import { Public } from 'src/common/decorators/public-api';
+import { IsObjectIdPipe } from '@nestjs/mongoose';
+import { UpdateItemDto } from './dto/update-item.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('items')
 export class ItemController {
@@ -25,6 +29,7 @@ export class ItemController {
   }
 
   @Post()
+  @ApiBearerAuth()
   create(
     @CurrentUser() user: UserDocument,
     @Body() createItemDto: CreateItemDto,
@@ -32,19 +37,22 @@ export class ItemController {
     return this.itemService.create(user, createItemDto);
   }
 
-  @Patch()
+  @Patch('/:id')
+  @ApiBearerAuth()
   update(
     @CurrentUser() user: UserDocument,
-    @Body() createItemDto: CreateItemDto,
+    @Param('id', IsObjectIdPipe) id: string,
+    @Body() updateItemDto: UpdateItemDto,
   ) {
-    return this.itemService.create(user, createItemDto);
+    return this.itemService.update(user, id, updateItemDto);
   }
 
-  @Delete()
+  @Delete('/:id')
+  @ApiBearerAuth()
   delete(
     @CurrentUser() user: UserDocument,
-    @Body() createItemDto: CreateItemDto,
+    @Param('id', IsObjectIdPipe) id: string,
   ) {
-    return this.itemService.create(user, createItemDto);
+    return this.itemService.delete(user, id);
   }
 }

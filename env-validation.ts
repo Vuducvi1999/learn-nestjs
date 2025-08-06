@@ -13,8 +13,6 @@ const envSchema = z.object({
 export const envValidation = (config: Record<string, unknown>) => {
   const parsedConfig = envSchema.safeParse(config);
 
-  console.log(parsedConfig);
-
   if (!parsedConfig.success) {
     console.error('Invalid environment variables:', parsedConfig.error.message);
     process.exit(1); // Exit the application if validation fails
